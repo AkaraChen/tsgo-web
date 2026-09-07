@@ -1,0 +1,2 @@
+*.wasm binary
+web/TYPESCRIPT-*.txt -text -whitespace

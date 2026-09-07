@@ -1,0 +1,15 @@
+{
+  "name": "tsgo-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "prepare:web": "node scripts/prepare-web.mjs",
+    "build:wasm": "bash scripts/build.sh && npm run prepare:web",
+    "test": "node scripts/smoke-web.mjs",
+    "test:cli": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "@bjorn3/browser_wasi_shim": "0.4.2"
+  }
+}

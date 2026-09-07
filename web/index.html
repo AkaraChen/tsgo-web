@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>tsgo playground</title>
+  <link rel="icon" href="data:,">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+  <main class="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-14">
+    <header class="mb-8 flex flex-wrap items-center justify-between gap-5">
+      <div>
+        <h1 class="text-2xl font-semibold tracking-tight">tsgo <span class="font-normal text-slate-400">playground</span></h1>
+        <p class="mt-2 text-sm text-slate-500">写一点 TypeScript，在浏览器里编译。</p>
+      </div>
+      <a href="https://github.com/AkaraChen/tsgo-web" target="_blank" rel="noreferrer" class="text-sm text-slate-500 underline-offset-4 hover:text-slate-900 hover:underline">GitHub ↗</a>
+    </header>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <label for="example" class="text-sm text-slate-500">示例</label>
+        <select id="example" class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-2 focus:outline-blue-500">
+          <option value="hello">Hello, TypeScript</option>
+          <option value="types">试试类型错误</option>
+          <option value="generics">泛型</option>
+        </select>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="hidden text-xs text-slate-400 sm:inline">⌘ / Ctrl + Enter</span>
+        <button id="compile" disabled class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-2 focus:outline-offset-2 focus:outline-blue-600 disabled:cursor-wait disabled:opacity-50">加载中…</button>
+        <button id="cancel" hidden class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm hover:bg-slate-100">取消</button>
+      </div>
+    </div>
+    <div class="grid overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:grid-cols-2">
+      <section class="min-w-0 border-b border-slate-200 md:border-r md:border-b-0">
+        <label for="source" class="block border-b border-slate-100 px-5 py-3 text-xs font-medium text-slate-500">main.ts <span class="float-right text-blue-600">TypeScript</span></label>
+        <textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off" class="block h-80 w-full resize-y border-0 p-5 font-mono text-sm leading-7 outline-none focus:ring-2 focus:ring-inset focus:ring-blue-200 md:h-[420px]" aria-label="TypeScript 源码"></textarea>
+      </section>
+      <section class="min-w-0">
+        <div class="flex items-center justify-between border-b border-slate-100 px-5 py-3 text-xs font-medium text-slate-500">
+          <label for="output">main.js</label>
+          <button id="copy" disabled class="text-slate-500 hover:text-blue-600 disabled:opacity-40">复制 JavaScript</button>
+        </div>
+        <textarea id="output" readonly spellcheck="false" placeholder="编译后的 JavaScript 会显示在这里。" class="block h-80 w-full resize-y border-0 bg-slate-50/50 p-5 font-mono text-sm leading-7 outline-none focus:ring-2 focus:ring-inset focus:ring-blue-200 md:h-[420px]" aria-label="JavaScript 输出"></textarea>
+      </section>
+    </div>
+    <section class="mt-4 rounded-xl border border-slate-200 bg-white p-5" aria-label="编译诊断">
+      <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+        <h2 class="font-medium text-slate-500">诊断</h2>
+        <span id="status" role="status" aria-live="polite" class="text-slate-500">正在下载并准备编译器…</span>
+      </div>
+      <pre id="diagnostics" class="mt-3 whitespace-pre-wrap break-words font-mono text-sm leading-6 text-slate-600">准备就绪后，点击「编译」开始。</pre>
+    </section>
+    <footer class="mt-6 flex flex-wrap justify-between gap-2 text-xs leading-6 text-slate-400">
+      <p>TypeScript → Go → TinyGo → WebAssembly</p>
+      <p>代码在本地浏览器编译 · 不执行生成的 JavaScript</p>
+    </footer>
+  </main>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

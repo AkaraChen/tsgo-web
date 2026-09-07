@@ -1,0 +1,7 @@
+.tools/
+upstream/
+*.wasm
+dist/
+node_modules/
+!web/tsgo.wasm
+*.tsbuildinfo
