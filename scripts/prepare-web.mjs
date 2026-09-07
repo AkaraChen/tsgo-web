@@ -31,3 +31,5 @@ await cp(new URL('node_modules/@bjorn3/browser_wasi_shim/LICENSE-MIT', root), ne
 await cp(new URL('upstream/LICENSE.txt', root), new URL('web/TYPESCRIPT-LICENSE.txt', root));
 await cp(new URL('upstream/NOTICE.txt', root), new URL('web/TYPESCRIPT-NOTICE.txt', root));
 console.log(`Browser WASM: ${(stripped.length / 1024 / 1024).toFixed(1)} MiB`);
+
+await import('./compress-web.mjs');

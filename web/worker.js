@@ -1,11 +1,10 @@
 import { compile } from './compiler.js';
+import { loadCompiler } from './load-compiler.js';
 let module;
 self.onmessage = async ({ data }) => {
   try {
     if (data.type === 'load') {
-      const response = await fetch(new URL('./tsgo.wasm', import.meta.url));
-      if (!response.ok) throw new Error(`Compiler download failed (${response.status})`);
-      module = await WebAssembly.compile(await response.arrayBuffer());
+      module = await loadCompiler(message => self.postMessage({ type: 'loading', message }));
       self.postMessage({ type: 'ready' });
     } else if (data.type === 'compile') {
       if (!module) throw new Error('Compiler is not ready');

@@ -2,7 +2,7 @@ import { WASI } from 'node:wasi';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
-const wasmPath = fileURLToPath(new URL('../tsgo.wasm', import.meta.url));
+const wasmPath = fileURLToPath(new URL('../web/tsgo.wasm', import.meta.url));
 const wasi = new WASI({
   version: 'preview1',
   args: ['tsgo', ...process.argv.slice(2)],

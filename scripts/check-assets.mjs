@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { gunzipSync } from 'node:zlib';
+import { createHash } from 'node:crypto';
+import { compilerAsset } from '../web/compiler-asset.js';
+const raw = await readFile(new URL('../web/tsgo.wasm', import.meta.url));
+const gzip = await readFile(new URL('../web/tsgo.wasm.gz', import.meta.url));
+assert.deepEqual(gunzipSync(gzip), raw, 'Compressed WASM is stale; run node scripts/compress-web.mjs');
+assert.equal(compilerAsset.version, createHash('sha256').update(raw).digest('hex'));
+assert.equal(compilerAsset.bytes, raw.length);
+assert.equal(compilerAsset.gzipBytes, gzip.length);
+console.log('PASS: compressed WASM and cache version match the prebuilt binary');

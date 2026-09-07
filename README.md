@@ -2,16 +2,23 @@
 
 一个最简 TypeScript playground：Tailwind CDN 装饰，TinyGo 编译的 TypeScript Go 编译器在浏览器 Web Worker 中运行。纯静态页面，无编译后端。
 
-## 本地运行
+## 直接使用
 
-需要 Node.js 24：
+**[打开在线 Playground →](https://akarachen.github.io/tsgo-web/)**
+
+无需克隆、安装 Node/Go/TinyGo 或编译 WASM。首次下载压缩后的编译器约 **5.6 MiB**，浏览器会缓存并在后续访问时复用；存储不可用时仍能正常加载。源文件仍只在浏览器中编译。
+
+**[下载预编译 tsgo.wasm](https://raw.githubusercontent.com/AkaraChen/tsgo-web/main/web/tsgo.wasm)**（约 17.5 MiB）。仓库已经包含这个可直接运行的 WASI Preview 1 二进制。
+
+## 本地运行（无需安装 npm 依赖）
+
+克隆仓库后，只需 Node.js 24：
 
 ```sh
-npm ci
-npm run dev
+node scripts/serve.mjs
 ```
 
-打开 <http://127.0.0.1:3000>。仓库包含浏览器需要的 WASM 和 WASI shim，启动页面不需要安装 Go 或重新构建编译器。Tailwind 样式从 CDN 加载，需要联网。
+打开 <http://127.0.0.1:3000>，也可以使用 `npm run dev`。WASM 和 WASI shim 已随仓库提供；`npm ci` 仅在维护依赖或从源码重新生成资源时需要。Tailwind 样式从 CDN 加载，需要联网。
 
 - 左侧编辑 TypeScript，点击「编译」或按 Ctrl / ⌘ + Enter。
 - 右侧查看、复制 JavaScript；下方显示类型错误与编译耗时。
@@ -32,11 +39,24 @@ npm test
 
 已通过 Chrome 实际操作验证：默认接口示例、类型错误、泛型与复制输出。浏览器 WASM 约 17.5 MiB。
 
-## 从源码构建 WASM
+## 使用预编译 CLI
+
+同样无需 Go/TinyGo 或 npm 依赖：
+
+```sh
+node scripts/run.mjs --version
+node scripts/run.mjs examples/hello.ts --target es2020 --outDir dist --singleThreaded --skipLibCheck
+node dist/hello.js
+```
+
+CLI 直接加载仓库中的 `web/tsgo.wasm`。如果只下载二进制，也可以使用其他支持 WASI Preview 1 的运行器。
+
+## 从源码构建 WASM（仅维护编译器时需要）
 
 源自 [microsoft/TypeScript](https://github.com/microsoft/TypeScript)，固定提交 `1f70213d4922b434345f639b441681e470c7cfc1`，未修改 TypeScript 源码。
 
 ```sh
+npm ci
 bash scripts/setup.sh
 npm run build:wasm
 ```
@@ -47,13 +67,11 @@ npm run build:wasm
 
 构建使用 `-p=2 -target=wasip1 -stack-size=1MB -opt=z -no-debug`。`scripts/prepare-web.mjs` 生成 `web/tsgo.wasm` 并复制锁定版本的 WASI shim。首次完整构建可能需要约 20–30 分钟和数 GB 内存；脚本限制并行度，并设置 `GOGC=50` 降低构建内存压力。
 
-完整 CLI 构建后也可以在 Node WASI 中使用：
+## 发布
 
-```sh
-node scripts/run.mjs examples/hello.ts --target es2020 --outDir dist --singleThreaded --skipLibCheck
-node dist/hello.js
-npm run test:cli
-```
+推送 `web/` 的更新到 `main` 后，GitHub Actions 会将已有静态资源发布到 GitHub Pages，部署不运行 Go/TinyGo 构建。重新生成 WASM 后，`prepare-web.mjs` 自动生成 gzip 和内容哈希，缓存按编译器版本区分。
+
+只需要更新压缩产物时运行 `node scripts/compress-web.mjs`，无需重编译 Go。
 
 ## 范围
 

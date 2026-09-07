@@ -35,7 +35,9 @@ function startWorker() {
   timeout = setTimeout(() => fail('加载超时，请检查网络后重试。'), 120_000);
   worker = new Worker(new URL('./worker.js', import.meta.url), { type: 'module' });
   worker.onmessage = ({ data }) => {
-    if (data.type === 'ready') {
+    if (data.type === 'loading') {
+      status(data.message);
+    } else if (data.type === 'ready') {
       clearTimeout(timeout);
       ready = true;
       status('就绪');

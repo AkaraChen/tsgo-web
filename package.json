@@ -6,7 +6,7 @@
     "dev": "node scripts/serve.mjs",
     "prepare:web": "node scripts/prepare-web.mjs",
     "build:wasm": "bash scripts/build.sh && npm run prepare:web",
-    "test": "node scripts/smoke-web.mjs",
+    "test": "node scripts/check-assets.mjs && node scripts/smoke-web.mjs",
     "test:cli": "node scripts/smoke.mjs"
   },
   "dependencies": {
